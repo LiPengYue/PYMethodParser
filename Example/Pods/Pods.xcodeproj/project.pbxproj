@@ -589,10 +589,7 @@
 			children = (
 				E68FE85449006F54C3C2688B909883C9 /* PYMethodParser.h */,
 				6776543FAF795950785DCF6CAD6188BF /* PYMethodParser.m */,
-				4CF6647AD31DD9C3BF0B670541B69A68 /* PYMethodParserConfig.h */,
-				7FBD7F151D9F8943C91565A32A9E7ADB /* PYMethodParserConfig.m */,
-				00754EF6FEEE6D7F02E45C59E9975B22 /* PYMethodParserGlobleConfig.h */,
-				012BE581ACAFA4FCA5A18F12BFEC40B8 /* PYMethodParserGlobleConfig.m */,
+				8669A79421A95A640080E291 /* Config */,
 				C1025E9102E8123747011219F2FED526 /* ErrorHandler */,
 				F832DF665AA567EF024400D9C6B7768C /* tool */,
 			);
@@ -809,6 +806,17 @@
 				4C34B0D7B07DAEE73B308A6D4B2018CE /* Products */,
 				077E37878C0D871B7FAE16DBF2A91817 /* Targets Support Files */,
 			);
+			sourceTree = "<group>";
+		};
+		8669A79421A95A640080E291 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				4CF6647AD31DD9C3BF0B670541B69A68 /* PYMethodParserConfig.h */,
+				7FBD7F151D9F8943C91565A32A9E7ADB /* PYMethodParserConfig.m */,
+				00754EF6FEEE6D7F02E45C59E9975B22 /* PYMethodParserGlobleConfig.h */,
+				012BE581ACAFA4FCA5A18F12BFEC40B8 /* PYMethodParserGlobleConfig.m */,
+			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 		87D7611294DB615663827E544E776D5F /* Pods-PYMethodParser_Tests */ = {

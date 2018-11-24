@@ -349,7 +349,8 @@ static inline PYInvocation * py_methodParser_Boxing(va_list vaList, id target, N
          \n    无法生成PYInvocation：\
          \n    对象：【%@】\
          \n    方法：%@\
-         \n    🌶🌶🌶🌶\n ",target,sel];
+         \n    🌶🌶🌶🌶\n\
+         \n .",target,sel];
         if (error) {
             *error = [NSError errorWithDomain:errorDescription code:PYMethodParserErrorEnum_TypeConversionError userInfo:nil];
         }
