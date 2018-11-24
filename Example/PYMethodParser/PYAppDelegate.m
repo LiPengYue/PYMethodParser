@@ -7,13 +7,32 @@
 //
 
 #import "PYAppDelegate.h"
+#import <PYMethodParserHeaders.h>
+@interface PYAppDelegate ()<NSCacheDelegate>
 
+@end
 @implementation PYAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    [PYMethodParserConfig setupConfig:^(PYMethodParserGlobleConfig *config) {
+       config
+        .setup_globalNotFoundSELHandlerType([PYAppDelegate class])
+        .setup_isPrintfLogWithMethodParserError(true)
+        .setup_isPrintfLogWithMethodPraserCallMethodSuccess(true)
+        .setup_isPrintf_methodParser_Boxing_Log(true)
+        .setup_methodSignatureCacheDelegate(self)
+        .setup_methodSignatureMaxCount(100000);
+    }];
+    [PYMethodParser callMethodWithTarget:self andSelName:@"cache:willEvictObject:" andError:nil,nil];
     return YES;
+}
+- (void) cache:(NSCache *)cache willEvictObject:(id)obj {
+    
+}
+
++ (void)py_notFoundSEL:(SEL)sel and_va_list:(va_list)list {
+    
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

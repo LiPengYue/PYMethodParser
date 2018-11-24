@@ -1,4 +1,4 @@
-//
+
 //  PYGlobalMethodParseErrorHandler.m
 //  PYKit_Example
 //
@@ -7,13 +7,15 @@
 //
 
 #import "PYGlobalNotFoundSELHandlerPrivate.h"
-#import "PYMethodParserHeaders.h"
+#import "PYGlobalNotFoundSELHandler.h"
+//#import "PYMethodParserHeaders.h"
 @implementation PYGlobalNotFoundSELHandlerPrivate
 + (void) methodParseErrorWithSel:(SEL) sel andClass: (Class) class and_va_list: (va_list) vaList {
     NSMethodSignature *signature;
-    
+    Class PYGlobalNotFoundSELHandlerType;
         // 没有值那么就发送一条固定消息到对象
     SEL remedySEL = NSSelectorFromString(@"py_notFoundSEL:and_va_list:");
+    
         signature = [class methodSignatureForSelector: remedySEL];
         if (signature) {
             // 向对象 发送对象方法 '- (void)py_notFoundSEL:(SEL)sel and_va_list: (va_list)vaList' 发送补救信息，并把原来想发送的消息传递过去

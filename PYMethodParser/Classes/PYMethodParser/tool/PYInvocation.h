@@ -29,7 +29,7 @@
 /**
  添加void *(CF等底层api需要调用这个函数添加)对象参数
 
- @param void *对象参数
+ @param cfpointer void *对象参数
  @param i 参数index（需要从第2 开始，因为函数内置两个参数： self 与 _cmd）
  */
 - (void)setArgumentWith_CFPointer: (void*) cfpointer andIndex: (NSInteger) i;
@@ -52,8 +52,8 @@
 /**
  添加oc对象参数
  
- @param obj oc对象参数
- @param i 参数index（需要从第2 开始，因为函数内置两个参数： self 与 _cmd）
+ @param argumentLocation obj oc对象参数
+ @param idx 参数index（需要从第2 开始，因为函数内置两个参数： self 与 _cmd）
  */
 - (void)setArgument:(void *)argumentLocation atIndex:(NSInteger)idx;
 /// 执行方法

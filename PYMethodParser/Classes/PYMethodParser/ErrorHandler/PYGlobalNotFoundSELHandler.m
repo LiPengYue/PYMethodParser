@@ -7,12 +7,19 @@
 //
 
 #import "PYGlobalNotFoundSELHandler.h"
-#import "PYKitHeaders.h"
+#import "PYMethodParserConfig.h"
+
+#ifdef DEBUG
+# define py_DLog(...) NSLog(__VA_ARGS__);
+#else
+# define py_DLog(...);
+#endif
 
 @implementation PYGlobalNotFoundSELHandler
 + (void) py_globalNotFoundSEL: (SEL) sel withClass: (Class) clas and_vaList: (va_list)list {
     NSString *classString = NSStringFromClass(clas);
     NSString *selString = NSStringFromSelector(sel);
+    Class PYGlobalNotFoundSELHandlerType;
     Class handlerClass =
     [PYGlobalNotFoundSELHandlerType class]
     ? [PYGlobalNotFoundSELHandlerType class]
@@ -33,7 +40,7 @@
      classString,
      selString
      ];
-    if (py_isPrintfLogWithMethodParserError) {    
+    if ([PYMethodParserConfig get_isPrintfLogWithMethodParserError]) {
         py_DLog(@"%@",description);
     }
 }

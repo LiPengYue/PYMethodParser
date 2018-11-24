@@ -8,8 +8,15 @@
 
 #import "PYInvocation.h"
 #import "PYInvocation_RetrurnID_Argument.h"
-#import "PYKitHeaders.h"
 #import "PYMethodParserHeaders.h"
+#import "PYMethodParserConfig.h"
+
+#ifdef DEBUG
+# define py_DLog(...) NSLog(__VA_ARGS__);
+#else
+# define py_DLog(...);
+#endif
+
 @interface PYInvocation ()
 @property (nonatomic,strong) NSInvocation *invocation;
 @property (nonatomic,strong) NSMutableDictionary <NSString *,PYInvocation_RetrurnID_Argument*> *py_array;
@@ -44,6 +51,7 @@
 
 - (void)invoke {
     [self.invocation invoke];
+    BOOL py_isPrintfLogWithMethodPraserCallMethodSuccess = [PYMethodParserConfig get_isPrintfLogWithMethodPraserCallMethodSuccess];
     if (py_isPrintfLogWithMethodPraserCallMethodSuccess) {
         py_DLog(@" \n\
                 \n    ✅ PYInvocation调用方法成功 \
@@ -56,6 +64,7 @@
 }
 - (void)invokeWithTarget:(id)target {
     [self.invocation invokeWithTarget:target];
+    BOOL py_isPrintfLogWithMethodPraserCallMethodSuccess;
     if (py_isPrintfLogWithMethodPraserCallMethodSuccess) {
         py_DLog(@" \n\
                 \n    ✅ PYInvocation调用方法成功 \

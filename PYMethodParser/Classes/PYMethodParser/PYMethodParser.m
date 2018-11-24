@@ -6,15 +6,23 @@
 //  Copyright © 2018年 LiPengYue. All rights reserved.
 //
 
-
+#import "PYMethodParser.h"
+#import "PYMethodParserConfig.h"
 #import "PYMethodSignatureCache.h"
 #import "PYInvocation.h"
-#import "PYMethodParserHeaders.h"
 #import "PYGlobalNotFoundSELHandlerPrivate.h"
-#import "PYKitHeaders.h"
-#import <string.h>
-#define py_methodParser_Boxing_Log(...) if(py_isPrintf_methodParser_Boxing_Log) py_DLog(__VA_ARGS__)
+#include "strings.h"
+#define py_methodParser_Boxing_Log(...) \
+BOOL py_isPrintf_methodParser_Boxing_Log = [PYMethodParserConfig get_isPrintf_methodParser_Boxing_Log];\
+    if(py_isPrintf_methodParser_Boxing_Log) {\
+    py_DLog(__VA_ARGS__);\
+    }
 
+#ifdef DEBUG
+# define py_DLog(...) NSLog(__VA_ARGS__);
+#else
+# define py_DLog(...);
+#endif
 
 
 /**
@@ -33,6 +41,11 @@ static PYMethodSignatureCache const *py_methodSignatureCache;
  */
 static inline NSMethodSignature * py_getMethodSignature(NSString *class, SEL sel) {
     NSMethodSignature *signature = nil;
+    
+    
+    long long py_maxMethodSignatureCacheCount = [PYMethodParserConfig get_maxMethodSignatureCacheCount];
+    Class PYGlobalNotFoundSELHandlerType = [PYMethodParserConfig get_globalNotFoundSELHandlerType];
+    
     if (!py_methodSignatureCache) {
         py_methodSignatureCache = [[PYMethodSignatureCache alloc]init];
     }
@@ -40,7 +53,7 @@ static inline NSMethodSignature * py_getMethodSignature(NSString *class, SEL sel
     NSString *selName = NSStringFromSelector(sel);
     if (!methodSignatureCache) {
         methodSignatureCache = [[PYMethodSignatureCache alloc]init];
-        methodSignatureCache.delegate = py_MethodSignatureCacheDelegate;
+//        methodSignatureCache.delegate = py_MethodSignatureCacheDelegate;
         Class c = NSClassFromString(class);
 
         signature = [c  instanceMethodSignatureForSelector: sel];
@@ -66,7 +79,7 @@ static inline NSMethodSignature * py_getMethodSignature(NSString *class, SEL sel
  解析一个多参数函数的参数值并用按顺序用数组返回
 
  @param vaList 多参数列表
- @param class 函数归属的类名
+ @param target 函数归属的类名
  @param selName 函数名
  @param error 错误
  @return 参数值列表
@@ -293,7 +306,7 @@ static inline PYInvocation * py_methodParser_Boxing(va_list vaList, id target, N
     if (!target) {
         return nil;
     }
-
+    
     va_list argList;
     va_start(argList, error);
     PYInvocation *invocation = py_methodParser_Boxing(argList, target, selName, error);
@@ -326,6 +339,7 @@ static inline PYInvocation * py_methodParser_Boxing(va_list vaList, id target, N
 }
 
 + (id) py_getPYInvocation: (PYInvocation *)invocation andTarget: (id)target andError:(NSError *__autoreleasing*)error andSel: (NSString *)sel andVa_list:(va_list) va_list{
+    BOOL py_isPrintfLogWithMethodParserError = [PYMethodParserConfig get_isPrintfLogWithMethodParserError];
     if (!invocation) {
         NSString *errorDescription =
         [NSString stringWithFormat:
@@ -339,7 +353,7 @@ static inline PYInvocation * py_methodParser_Boxing(va_list vaList, id target, N
         if (error) {
             *error = [NSError errorWithDomain:errorDescription code:PYMethodParserErrorEnum_TypeConversionError userInfo:nil];
         }
-        if(py_isPrintfLogWithMethodParserError) {
+         if(py_isPrintfLogWithMethodParserError) {
             py_DLog(@"%@",errorDescription);
         }
         [PYGlobalNotFoundSELHandlerPrivate methodParseErrorWithSel:NSSelectorFromString(sel) andClass:[target class] and_va_list:va_list];
@@ -349,7 +363,10 @@ static inline PYInvocation * py_methodParser_Boxing(va_list vaList, id target, N
 }
 
 + (id)py_conversionTarget: (NSString *)className andError: (NSError *__autoreleasing*) error {
+    
     id target = NSClassFromString(className);
+    BOOL py_isPrintfLogWithMethodParserError = [PYMethodParserConfig get_isPrintfLogWithMethodParserError];
+    
     if (!target) {
         
         NSString *errorDescription =
